@@ -14,7 +14,7 @@ class ChessTable extends Model
      *
      * @var string
      */
-    protected $table = 'chess_table';
+    protected $table = 'chess_tables';
 
     /**
      * The attributes that are mass assignable.

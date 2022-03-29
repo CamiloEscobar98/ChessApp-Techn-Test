@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('chess_table', function (Blueprint $table) {
+        Schema::create('chess_tables', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50);
             $table->unsignedTinyInteger('dimensions')->default(16);
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chess_table');
+        Schema::dropIfExists('chess_tables');
     }
 };
