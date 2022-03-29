@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('chess_tables', function (Blueprint $table) {
+        Schema::create('players', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50);
-            $table->unsignedTinyInteger('dimensions')->default(16);
+            $table->string('email', 120)->unique('unique_email_players');
+            $table->string('phone', 20);
 
-            $table->unique(['name', 'dimensions'], 'unique_chess_tables');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chess_tables');
+        Schema::dropIfExists('players');
     }
 };
