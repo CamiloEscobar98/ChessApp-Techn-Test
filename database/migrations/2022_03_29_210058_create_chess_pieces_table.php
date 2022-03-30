@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('chess_pieces', function (Blueprint $table) {
             $table->tinyIncrements('id');
             $table->string('name')->unique('unique_name_chess_pieces');
-            $table->string('slug')->unique('unique_slug_chess_pieces');
             $table->timestamps();
         });
     }
