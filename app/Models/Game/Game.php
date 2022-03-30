@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 
 use Database\Factories\GameFactory;
 
+use App\Models\Player;
+
 class Game extends Model
 {
     use HasFactory;
@@ -76,5 +78,35 @@ class Game extends Model
     public function gamingPlayer()
     {
         return $this->hasOne(GamingPlayer::class);
+    }
+
+    /**
+     * Get the PlayerOne which is relationed with Game.
+     * 
+     * @return Player $player
+     */
+    public function playerOne()
+    {
+        return $this->belongsToMany(Player::class, "gaming_players", null, 'player_one_id');
+    }
+
+    /**
+     * Get the PlayerOne which is relationed with Game.
+     * 
+     * @return Player $player
+     */
+    public function playerTwo()
+    {
+        return $this->belongsToMany(Player::class, "gaming_players", null, 'player_two_id');
+    }
+
+    /**
+     * Get the PlayerOne which is relationed with Game.
+     * 
+     * @return Player $player
+     */
+    public function playerWinner()
+    {
+        return $this->belongsToMany(Player::class, "gaming_players", null, 'player_winner_id');
     }
 }

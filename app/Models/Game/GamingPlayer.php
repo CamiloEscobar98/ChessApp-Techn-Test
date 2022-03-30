@@ -3,9 +3,11 @@
 namespace App\Models\Game;
 
 use App\Models\Player;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class GamingPlayer extends Model
+use App\Models\ChessTable;
+
+class GamingPlayer extends Pivot
 {
     /**
      * The table associated with the model.
@@ -13,6 +15,13 @@ class GamingPlayer extends Model
      * @var string
      */
     protected $table = 'gaming_players';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = true;
 
     /**
      * The attributes that are mass assignable.
@@ -30,7 +39,7 @@ class GamingPlayer extends Model
     {
         return $this->belongsTo(Game::class);
     }
-    
+
     /**
      * Get the Player 1 which is relationed with GamingPlayer.
      * 
@@ -38,7 +47,7 @@ class GamingPlayer extends Model
      */
     public function playerOne()
     {
-        return $this->belongsTo(Player::class, 'player_one_id');
+        return $this->belongsToMany(Player::class, null, null, GamingPlayer::class, 'player_one_id');
     }
 
     /**
@@ -50,7 +59,7 @@ class GamingPlayer extends Model
     {
         return $this->belongsTo(Player::class, 'player_two_id');
     }
-    
+
     /**
      * Get the Player WINNER which is relationed with GamingPlayer.
      * 
@@ -61,5 +70,13 @@ class GamingPlayer extends Model
         return $this->belongsTo(Player::class, 'player_winner_id');
     }
 
-
+    /**
+     * Get the ChessTable which is relationed with GamingPlayer.
+     * 
+     * @return ChessTable $chessTable
+     */
+    public function chessTable()
+    {
+        return $this->belongsToMany(ChessTable::class, null, 'chess_table_id');
+    }
 }
