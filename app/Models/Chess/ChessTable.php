@@ -1,14 +1,27 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Chess;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
+use Database\Factories\ChessTableFactory;
+
 class ChessTable extends Model
 {
     use HasFactory;
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<static>
+     */
+    protected static function newFactory()
+    {
+        return ChessTableFactory::new();
+    }
+
     /**
      * The table associated with the model.
      *

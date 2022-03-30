@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 use App\Models\Game\Game;
-use App\Models\ChessTable;
+use App\Models\Chess\ChessTable;
 use App\Models\Player;
 
 class GameFactory extends Factory

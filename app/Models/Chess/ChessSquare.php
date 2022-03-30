@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Chess;
 
 use Illuminate\Database\Eloquent\Model;
 
