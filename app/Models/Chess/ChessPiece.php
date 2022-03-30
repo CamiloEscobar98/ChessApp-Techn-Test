@@ -62,7 +62,7 @@ class ChessPiece extends Model
      */
     public function avaliableMovements($position_x, $position_y, $dimensions)
     {
-        if ($position_x > 0 && $position_y > 0) {
+        if (($position_x > 0 && $position_y > 0) && $position_x <= $dimensions && $position_y <= $dimensions) {
             return $this->movements->map(function ($movement) use ($position_x, $position_y, $dimensions) {
                 $min_X = $position_x + $movement->movement_x;
                 $min_Y = $position_y + $movement->movement_y;
