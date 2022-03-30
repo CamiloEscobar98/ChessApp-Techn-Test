@@ -16,10 +16,76 @@ class ChessPieceSeeder extends Seeder
      */
     public function run()
     {
-        $pieces = ['king', 'rook', 'pawn', 'knight', 'queen', 'bishop'];
+        $pieces = [
+            [
+                'name' => 'king',
+                'movements' => []
+            ],
+            [
+                'name' => 'rook',
+                'movements' => []
+            ],
+            [
+                'name' => 'pawn',
+                'movements' => []
+            ],
+            [
+                'name' => 'knight',
+                'movements' => [
+                    [
+                        'movement_x' => 1,
+                        'movement_y' => 2,
+                    ],
+                    [
+                        'movement_x' => 2,
+                        'movement_y' => 1,
+                    ],
+                    [
+                        'movement_x' => 2,
+                        'movement_y' => -1,
+                    ],
+                    [
+                        'movement_x' => 1,
+                        'movement_y' => -2,
+                    ],
+                    [
+                        'movement_x' => -1,
+                        'movement_y' => -2,
+                    ],
+                    [
+                        'movement_x' => -2,
+                        'movement_y' => -1,
+                    ],
+                    [
+                        'movement_x' => -2,
+                        'movement_y' => 1,
+                    ],
+                    [
+                        'movement_x' => -1,
+                        'movement_y' => 2,
+                    ],
+                ]
+            ],
+            [
+                'name' => 'queen',
+                'movements' => []
+            ],
+            [
+                'name' => 'bishop',
+                'movements' => []
+            ],
+        ];
 
         foreach ($pieces as $piece) {
-            ChessPiece::create(['name' => $piece]);
+            $chessPiece = ChessPiece::create(['name' => $piece['name']]);
+            $movements = $piece['movements'];
+            if (!empty($movements)) {
+                foreach ($movements as $movement) {
+                    $chessPiece->movements()->create([
+                        'movement_x' => $movement['movement_x'], 'movement_y' => $movement['movement_y']
+                    ]);
+                }
+            }
         }
     }
 }

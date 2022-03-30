@@ -42,4 +42,14 @@ class ChessPiece extends Model
     {
         return Str::upper($value);
     }
+
+    /**
+     * Get all Piece Movements which are relationed with the ChessPiece.
+     * 
+     * @return PieceMovement[] $pieceMovements
+     */
+    public function movements()
+    {
+        return $this->hasMany(PieceMovement::class);
+    }
 }
