@@ -28,4 +28,24 @@ class ChessTableFactory extends Factory
             'dimensions' => $dimensions,
         ];
     }
+
+    /**
+     * Define the model's configuration.
+     *
+     * @return void
+     */
+    public function configure()
+    {
+        return $this->afterCreating(function ($chessTable) {
+            $contX = 1;
+            while ($contX <= $chessTable->dimensions) {
+                $contY = 1;
+                while ($contY <= $chessTable->dimensions) {
+                    $chessTable->chessSquares()->create(['position_x' => $contX, 'position_y' => $contY]);
+                    $contY++;
+                }
+                $contX++;
+            }
+        });
+    }
 }
