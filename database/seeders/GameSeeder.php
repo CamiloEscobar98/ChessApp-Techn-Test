@@ -5,7 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+use App\Models\Game;
+
+class GameSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,11 +16,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-            ChessSeeder::class,
-            PlayerSeeder::class,
-            GameStateSeeder::class,
-            GameSeeder::class
-        ]);
+        Game::factory()->create();
     }
 }

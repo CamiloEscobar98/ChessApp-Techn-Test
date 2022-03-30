@@ -16,6 +16,19 @@ class ChessSeeder extends Seeder
      */
     public function run()
     {
-        ChessTable::factory()->count(2)->create();
+        $chessTables = ChessTable::factory()->count(2)->create();
+
+        foreach ($chessTables as $chessTable) {
+            $contX = 1;
+
+            while ($contX <= $chessTable->dimensions) {
+                $contY = 1;
+                while ($contY <= $chessTable->dimensions) {
+                    $chessTable->chessSquares()->create(['position_x' => $contX, 'position_y' => $contY]);
+                    $contY++;
+                }
+                $contX++;
+            }
+        }
     }
 }

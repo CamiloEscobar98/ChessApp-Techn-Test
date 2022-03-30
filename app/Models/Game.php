@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ChessTable extends Model
+class Game extends Model
 {
     use HasFactory;
     /**
@@ -14,17 +14,17 @@ class ChessTable extends Model
      *
      * @var string
      */
-    protected $table = 'chess_tables';
+    protected $table = 'games';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'dimensions'];
+    protected $fillable = ['chess_table_id', 'name', 'game_status'];
 
     /**
-     * Set the ChessTable's name.
+     * Set the Game's name.
      *
      * @param  string  $value
      * @return void
@@ -35,7 +35,7 @@ class ChessTable extends Model
     }
 
     /**
-     * Get the ChessTable's name.
+     * Get the Game's name.
      *
      * @param  string  $value
      * @return string
@@ -46,23 +46,12 @@ class ChessTable extends Model
     }
 
     /**
-     * Get the ChessTable's dimensions.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getDimensionsTransformAttribute()
-    {
-        return $this->dimensions . "x" . $this->dimensions;
-    }
-
-    /**
-     * Get the Chess Squares which are relationed with the ChessTable.
+     * Get the GameState which is relationed with Game.
      * 
-     * @return ChessSquare[] $chessSquares
+     * @return GameState $gameState
      */
-    public function chessSquares()
+    public function GameState()
     {
-        return $this->hasMany(ChessSquare::class);
+        return $this->belongsTo(GameState::class);
     }
 }
