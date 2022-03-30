@@ -32,7 +32,7 @@ class ChessSquare extends Model
      * 
      * @return ChessTable $chessTable
      */
-    public function ChessTable()
+    public function chessTable()
     {
         return $this->belongsTo(ChessTable::class);
     }

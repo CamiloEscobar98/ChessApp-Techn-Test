@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-use App\Models\GameState;
+use App\Models\Game\GameState;
 
 class GameStateSeeder extends Seeder
 {
@@ -16,7 +16,7 @@ class GameStateSeeder extends Seeder
      */
     public function run()
     {
-        $gameStates = ['Created Recently', 'Suspended', 'Completed'];
+        $gameStates = ['Created Recently', 'In Game', 'Suspended', 'Completed'];
 
         foreach ($gameStates as $gameState) {
             GameState::create(['name' => $gameState]);

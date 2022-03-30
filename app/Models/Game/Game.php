@@ -1,14 +1,27 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Game;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
+
+use Database\Factories\GameFactory;
 
 class Game extends Model
 {
     use HasFactory;
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<static>
+     */
+    protected static function newFactory()
+    {
+        return GameFactory::new();
+    }
+
     /**
      * The table associated with the model.
      *
@@ -50,8 +63,18 @@ class Game extends Model
      * 
      * @return GameState $gameState
      */
-    public function GameState()
+    public function gameState()
     {
         return $this->belongsTo(GameState::class);
+    }
+
+    /**
+     * Get the GamingPlayer which is relationed with Game.
+     * 
+     * @return GameState $gameState
+     */
+    public function gamingPlayer()
+    {
+        return $this->hasOne(GamingPlayer::class);
     }
 }
