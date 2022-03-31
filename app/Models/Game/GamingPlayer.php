@@ -123,6 +123,7 @@ class GamingPlayer extends Pivot
                 $positionXOne + $randomAvaliableMovementPlayerOne->movement_x,
                 $positionYOne + $randomAvaliableMovementPlayerOne->movement_y
             );
+
             $firstMovePlayerTwo = $this->createPlayerMovement(
                 $pieceTwo->id,
                 $playerTwo,
@@ -140,20 +141,36 @@ class GamingPlayer extends Pivot
                     $avaliableMovementsPlayerTwo = $pieceOne->avaliableMovements($firstMovePlayerTwo->position_x, $firstMovePlayerTwo->position_y, $dimensions);
                     $randomAvaliableMovementPlayerTwo = $avaliableMovementsPlayerTwo->random(1)->first();
 
-
-
                     $firstMovePlayerOne = $this->createPlayerMovement(
                         $pieceOne->id,
                         $playerOne,
                         $firstMovePlayerOne->position_x + $randomAvaliableMovementPlayerOne->movement_x,
                         $firstMovePlayerOne->position_y + $randomAvaliableMovementPlayerOne->movement_y
                     );
+
+                    if ($firstMovePlayerOne->position_converted == $firstMovePlayerTwo->position_converted) {
+                        $this->player_winner_id = $playerOne;
+                        $this->save();
+
+                        $this->game->game_state_id = 4;
+                        $this->game->save();
+                    }
+
                     $firstMovePlayerTwo = $this->createPlayerMovement(
                         $pieceTwo->id,
                         $playerTwo,
                         $firstMovePlayerTwo->position_x + $randomAvaliableMovementPlayerTwo->movement_x,
                         $firstMovePlayerTwo->position_y + $randomAvaliableMovementPlayerTwo->movement_y
                     );
+
+                    if ($firstMovePlayerTwo->position_converted == $firstMovePlayerOne->position_converted) {
+                        $this->player_winner_id = $playerTwo;
+                        $this->save();
+
+                        $this->game->game_state_id = 4;
+                        $this->game->save();
+                    }
+
                     $cont++;
                 } catch (\Throwable $th) {
                     dd($th->getMessage());
@@ -163,7 +180,8 @@ class GamingPlayer extends Pivot
             dd($th->getMessage());
         }
     }
-    public function createPlayerMovement($piece, $player, $positionX, $positionY)
+
+    private function createPlayerMovement($piece, $player, $positionX, $positionY)
     {
         return $this->playerMovements()->create([
             'player_id' => $player,

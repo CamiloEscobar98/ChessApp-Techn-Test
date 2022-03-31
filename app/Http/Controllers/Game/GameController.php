@@ -25,32 +25,46 @@ class GameController extends Controller
     {
         $game = Game::findOrFail($id);
 
-        if ($game->automatic_mode) {
-            $maxNumber = $game->chessTable->dimensions;
-            $minNumber = $maxNumber * (-1);
-            $rules = [
-                'piece_one' => ['required', 'exists:chess_pieces,name'],
-                'piece_two' => ['required', 'exists:chess_pieces,name'],
-                'position_x_one' => ['different:position_x_two', 'numeric', 'min:' . $minNumber, 'max:' . $maxNumber],
-                'position_y_one' => ['different:position_y_two', 'numeric', 'min:' . $minNumber, 'max:' . $maxNumber],
-                'position_x_two' => ['different:position_x_one', 'numeric', 'min:' . $minNumber, 'max:' . $maxNumber],
-                'position_y_two' => ['different:position_y_one', 'numeric', 'min:' . $minNumber, 'max:' . $maxNumber]
-            ];
-            $this->validate($request, $rules, [], $this->attributes);
+        if ($game->game_state_id != 4) {
+            if ($game->automatic_mode) {
+                $maxNumber = $game->chessTable->dimensions;
+                $minNumber = $maxNumber * (-1);
+                $rules = [
+                    'piece_one' => ['required', 'exists:chess_pieces,name'],
+                    'piece_two' => ['required', 'exists:chess_pieces,name'],
+                    'position_x_one' => ['different:position_x_two', 'numeric', 'min:' . $minNumber, 'max:' . $maxNumber],
+                    'position_y_one' => ['different:position_y_two', 'numeric', 'min:' . $minNumber, 'max:' . $maxNumber],
+                    'position_x_two' => ['different:position_x_one', 'numeric', 'min:' . $minNumber, 'max:' . $maxNumber],
+                    'position_y_two' => ['different:position_y_one', 'numeric', 'min:' . $minNumber, 'max:' . $maxNumber]
+                ];
+                $this->validate($request, $rules, [], $this->attributes);
 
-            $pieceOne = $request->get('piece_one', 'knight');
-            $pieceTwo = $request->get('piece_two', 'knight');
+                $pieceOne = $request->get('piece_one', 'knight');
+                $pieceTwo = $request->get('piece_two', 'knight');
 
-            $positionXOne = $request->get('position_x_one', 1);
-            $positionYOne = $request->get('position_y_one', 1);
-            $positionXTwo = $request->get('position_x_two', $maxNumber);
-            $positionYTwo = $request->get('position_y_two', $maxNumber);
+                $positionXOne = $request->get('position_x_one', 1);
+                $positionYOne = $request->get('position_y_one', 1);
+                $positionXTwo = $request->get('position_x_two', $maxNumber);
+                $positionYTwo = $request->get('position_y_two', $maxNumber);
 
-            $game->gamingPlayer->automaticPlaying($pieceOne, $pieceTwo, $positionXOne, $positionYOne, $positionXTwo, $positionYTwo);
+                $game->gamingPlayer->automaticPlaying($pieceOne, $pieceTwo, $positionXOne, $positionYOne, $positionXTwo, $positionYTwo);
 
-            return response()->json($game->gamingPlayer->playerTwo);
+                return response()->json(['message' => 'The game has completed, the winner is: ' . $game->gamingPlayer->playerWinner->name]);
+            } else {
+                $rules = [];
+            }
         } else {
-            $rules = [];
+            return response()->json(['message' => 'The game already has been completed.']);
         }
+    }
+
+    /**
+     * Get the information about Game
+     * 
+     * @return Response
+     */
+    public function info($id)
+    {
+        # code...
     }
 }
