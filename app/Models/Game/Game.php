@@ -62,6 +62,17 @@ class Game extends Model
     }
 
     /**
+     * Get the Game's automatic mode converted.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getAutomaticModeConvertedAttribute($value)
+    {
+        return $value ? "Automatic Mode" : "Manual Mode";
+    }
+
+    /**
      * Get the GameState which is relationed with Game.
      * 
      * @return GameState $gameState

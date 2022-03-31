@@ -21,5 +21,6 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'games', 'namespace' => 'Game'], function () use ($router) {
     $router->group(['prefix' => '{id}'], function () use ($router) {
         $router->post('play', 'GameController@play');
+        $router->get('info', 'GameController@info');
     });
 });
