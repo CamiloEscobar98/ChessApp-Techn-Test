@@ -16,3 +16,10 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+
+$router->group(['prefix' => 'games', 'namespace' => 'Game'], function () use ($router) {
+    $router->group(['prefix' => '{id}'], function () use ($router) {
+        $router->post('play', 'GameController@play');
+    });
+});
