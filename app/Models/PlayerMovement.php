@@ -25,6 +25,17 @@ class PlayerMovement extends Model
     protected $fillable = ['gaming_player_id', 'player_id', 'chess_piece_id', 'position_x', 'position_y'];
 
     /**
+     * Get the PlayerMovement's position converted to float.
+     *
+     * @return float
+     */
+    public function getPositionConvertedAttribute()
+    {
+        $floatString = $this->position_x . "." . $this->position_y;
+        return floatval($floatString);
+    }
+
+    /**
      * Get the GamingPlayer which is relationed with PlayerMovement.
      * 
      * @return GamingPlayer $gamingPlayer

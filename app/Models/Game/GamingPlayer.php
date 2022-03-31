@@ -131,16 +131,15 @@ class GamingPlayer extends Pivot
             );
 
             $cont = 0;
-            while (
-                ($firstMovePlayerOne->position_x != $firstMovePlayerTwo->position_x
-                    && $firstMovePlayerOne->position_y != $firstMovePlayerTwo->position_y)
-            ) {
+
+            while ($firstMovePlayerOne->position_converted !=  $firstMovePlayerTwo->position_converted) {
                 try {
                     $avaliableMovementsPlayerOne = $pieceOne->avaliableMovements($firstMovePlayerOne->position_x, $firstMovePlayerOne->position_y, $dimensions);
                     $randomAvaliableMovementPlayerOne = $avaliableMovementsPlayerOne->random(1)->first();
 
                     $avaliableMovementsPlayerTwo = $pieceOne->avaliableMovements($firstMovePlayerTwo->position_x, $firstMovePlayerTwo->position_y, $dimensions);
                     $randomAvaliableMovementPlayerTwo = $avaliableMovementsPlayerTwo->random(1)->first();
+
 
 
                     $firstMovePlayerOne = $this->createPlayerMovement(
@@ -160,7 +159,6 @@ class GamingPlayer extends Pivot
                     dd($th->getMessage());
                 }
             }
-            dd($cont);
         } catch (QueryException $th) {
             dd($th->getMessage());
         }
