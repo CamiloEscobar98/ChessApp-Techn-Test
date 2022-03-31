@@ -6,6 +6,7 @@ use App\Models\Player;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 use App\Models\ChessTable;
+use App\Models\PlayerMovement;
 
 class GamingPlayer extends Pivot
 {
@@ -78,5 +79,15 @@ class GamingPlayer extends Pivot
     public function chessTable()
     {
         return $this->belongsToMany(ChessTable::class, null, 'chess_table_id');
+    }
+
+    /**
+     * Get the PlayerMovements which are relationed with PlayerMovement.
+     * 
+     * @return PlayerMovement $playerMovements
+     */
+    public function playerMovements()
+    {
+        return $this->hasMany(PlayerMovement::class);
     }
 }
