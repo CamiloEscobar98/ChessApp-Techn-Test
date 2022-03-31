@@ -107,29 +107,60 @@ class GamingPlayer extends Pivot
             if ($this->playerMovements()->count() == 0) {
                 $this->createPlayerMovement($pieceOne->id, $playerOne, $positionXOne, $positionYOne);
                 $this->createPlayerMovement($pieceTwo->id, $playerTwo, $positionXTwo, $positionYTwo);
-            } else {
+            }
+
+            $avaliableMovementsPlayerOne = $pieceOne->avaliableMovements($positionXOne, $positionYOne, $dimensions);
+            $randomAvaliableMovementPlayerOne = $avaliableMovementsPlayerOne->random(1)->first();
+
+            $avaliableMovementsPlayerTwo = $pieceOne->avaliableMovements($positionXTwo, $positionYTwo, $dimensions);
+
+            $randomAvaliableMovementPlayerTwo = $avaliableMovementsPlayerTwo->random(1)->first();
 
 
-                $avaliableMovementsPlayerOne = $pieceOne->avaliableMovements($positionXOne, $positionYOne, $dimensions);
-                $randomAvaliableMovementPlayerOne = $avaliableMovementsPlayerOne->random(1)->first();
-                
-                dd($randomAvaliableMovementPlayerOne);
+            $firstMovePlayerOne = $this->createPlayerMovement(
+                $pieceOne->id,
+                $playerOne,
+                $positionXOne + $randomAvaliableMovementPlayerOne->movement_x,
+                $positionYOne + $randomAvaliableMovementPlayerOne->movement_y
+            );
+            $firstMovePlayerTwo = $this->createPlayerMovement(
+                $pieceTwo->id,
+                $playerTwo,
+                $positionXTwo + $randomAvaliableMovementPlayerTwo->movement_x,
+                $positionYTwo + $randomAvaliableMovementPlayerTwo->movement_y
+            );
 
-                $avaliableMovementsPlayerTwo = $pieceOne->avaliableMovements($positionXTwo, $positionYTwo, $dimensions);
-                $randomAvaliableMovementPlayerTwo = $avaliableMovementsPlayerTwo->random(1)->first();
-                
-                
-                $firstMovePlayerOne = $this->createPlayerMovement($pieceOne->id, $playerOne, $randomAvaliableMovementPlayerOne->position_x, $randomAvaliableMovementPlayerOne->position_y);
-                $firstMovePlayerTwo = $this->createPlayerMovement($pieceTwo->id, $playerTwo, $randomAvaliableMovementPlayerTwo->position_x, $randomAvaliableMovementPlayerTwo->position_y);
+            $cont = 0;
+            while (
+                ($firstMovePlayerOne->position_x != $firstMovePlayerTwo->position_x
+                    && $firstMovePlayerOne->position_y != $firstMovePlayerTwo->position_y)
+            ) {
+                try {
+                    $avaliableMovementsPlayerOne = $pieceOne->avaliableMovements($firstMovePlayerOne->position_x, $firstMovePlayerOne->position_y, $dimensions);
+                    $randomAvaliableMovementPlayerOne = $avaliableMovementsPlayerOne->random(1)->first();
 
-                while (
-                    $firstMovePlayerOne->position_x != $firstMovePlayerTwo->position_x
-                    && $firstMovePlayerOne->position_y != $firstMovePlayerTwo->position_y
-                ) {
-                    $firstMovePlayerOne = $this->createPlayerMovement($pieceOne->id, $playerOne, $firstMovePlayerOne->position_x, $firstMovePlayerOne->position_y);
-                    $firstMovePlayerTwo = $this->createPlayerMovement($pieceTwo->id, $playerTwo, $firstMovePlayerTwo->position_x, $firstMovePlayerTwo->position_y);
+                    $avaliableMovementsPlayerTwo = $pieceOne->avaliableMovements($firstMovePlayerTwo->position_x, $firstMovePlayerTwo->position_y, $dimensions);
+                    $randomAvaliableMovementPlayerTwo = $avaliableMovementsPlayerTwo->random(1)->first();
+
+
+                    $firstMovePlayerOne = $this->createPlayerMovement(
+                        $pieceOne->id,
+                        $playerOne,
+                        $firstMovePlayerOne->position_x + $randomAvaliableMovementPlayerOne->movement_x,
+                        $firstMovePlayerOne->position_y + $randomAvaliableMovementPlayerOne->movement_y
+                    );
+                    $firstMovePlayerTwo = $this->createPlayerMovement(
+                        $pieceTwo->id,
+                        $playerTwo,
+                        $firstMovePlayerTwo->position_x + $randomAvaliableMovementPlayerTwo->movement_x,
+                        $firstMovePlayerTwo->position_y + $randomAvaliableMovementPlayerTwo->movement_y
+                    );
+                    $cont++;
+                } catch (\Throwable $th) {
+                    dd($th->getMessage());
                 }
             }
+            dd($cont);
         } catch (QueryException $th) {
             dd($th->getMessage());
         }
