@@ -2,11 +2,13 @@
 
 namespace App\Models\Game;
 
-use App\Models\Player;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-use App\Models\ChessTable;
+use App\Models\Player;
+use App\Models\Chess\ChessTable;
+use App\Models\Chess\ChessPiece;
 use App\Models\PlayerMovement;
+use Illuminate\Database\QueryException;
 
 class GamingPlayer extends Pivot
 {
@@ -48,7 +50,7 @@ class GamingPlayer extends Pivot
      */
     public function playerOne()
     {
-        return $this->belongsToMany(Player::class, null, null, GamingPlayer::class, 'player_one_id');
+        return $this->belongsTo(Player::class, 'player_one_id');
     }
 
     /**
@@ -88,6 +90,57 @@ class GamingPlayer extends Pivot
      */
     public function playerMovements()
     {
-        return $this->hasMany(PlayerMovement::class);
+        return $this->hasMany(PlayerMovement::class, 'gaming_player_id');
+    }
+
+    public function automaticPlaying($pieceOne, $pieceTwo, $positionXOne, $positionYOne, $positionXTwo, $positionYTwo)
+    {
+        $pieceOne = ChessPiece::where('name', $pieceOne)->get()->first();
+        $pieceTwo = ChessPiece::where('name', $pieceTwo)->get()->first();
+
+        $playerOne = $this->playerOne->id;
+        $playerTwo = $this->playerTwo->id;
+
+        $dimensions = $this->game->chessTable->dimensions;
+
+        try {
+            if ($this->playerMovements()->count() == 0) {
+                $this->createPlayerMovement($pieceOne->id, $playerOne, $positionXOne, $positionYOne);
+                $this->createPlayerMovement($pieceTwo->id, $playerTwo, $positionXTwo, $positionYTwo);
+            } else {
+
+
+                $avaliableMovementsPlayerOne = $pieceOne->avaliableMovements($positionXOne, $positionYOne, $dimensions);
+                $randomAvaliableMovementPlayerOne = $avaliableMovementsPlayerOne->random(1)->first();
+                
+                dd($randomAvaliableMovementPlayerOne);
+
+                $avaliableMovementsPlayerTwo = $pieceOne->avaliableMovements($positionXTwo, $positionYTwo, $dimensions);
+                $randomAvaliableMovementPlayerTwo = $avaliableMovementsPlayerTwo->random(1)->first();
+                
+                
+                $firstMovePlayerOne = $this->createPlayerMovement($pieceOne->id, $playerOne, $randomAvaliableMovementPlayerOne->position_x, $randomAvaliableMovementPlayerOne->position_y);
+                $firstMovePlayerTwo = $this->createPlayerMovement($pieceTwo->id, $playerTwo, $randomAvaliableMovementPlayerTwo->position_x, $randomAvaliableMovementPlayerTwo->position_y);
+
+                while (
+                    $firstMovePlayerOne->position_x != $firstMovePlayerTwo->position_x
+                    && $firstMovePlayerOne->position_y != $firstMovePlayerTwo->position_y
+                ) {
+                    $firstMovePlayerOne = $this->createPlayerMovement($pieceOne->id, $playerOne, $firstMovePlayerOne->position_x, $firstMovePlayerOne->position_y);
+                    $firstMovePlayerTwo = $this->createPlayerMovement($pieceTwo->id, $playerTwo, $firstMovePlayerTwo->position_x, $firstMovePlayerTwo->position_y);
+                }
+            }
+        } catch (QueryException $th) {
+            dd($th->getMessage());
+        }
+    }
+    public function createPlayerMovement($piece, $player, $positionX, $positionY)
+    {
+        return $this->playerMovements()->create([
+            'player_id' => $player,
+            'chess_piece_id' => $piece,
+            'position_x' => $positionX,
+            'position_y' => $positionY,
+        ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models\Game;
 
+use App\Models\Chess\ChessTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
@@ -36,7 +37,7 @@ class Game extends Model
      *
      * @var array
      */
-    protected $fillable = ['chess_table_id', 'name', 'game_status'];
+    protected $fillable = ['chess_table_id', 'name', 'game_status', 'automatic_mode'];
 
     /**
      * Set the Game's name.
@@ -68,6 +69,16 @@ class Game extends Model
     public function gameState()
     {
         return $this->belongsTo(GameState::class);
+    }
+
+    /**
+     * Get the ChessTable which is relationed with Game.
+     * 
+     * @return ChessTable $chessTable
+     */
+    public function chessTable()
+    {
+        return $this->belongsTo(ChessTable::class);
     }
 
     /**
